@@ -5,7 +5,7 @@ const app = new cdk.App();
 new InvestInfrastructureStack(app, 'InvestInfrastructureStack', {
   env: {
     account: '344658833669',
-    region: 'eu-central-1'
+    region: 'eu-west-1'
   }
 });
 app.synth();
