@@ -104,6 +104,7 @@ export class InvestInfrastructureStack extends cdk.Stack {
           buildCommand: 'npm i',
           startCommand: 'sh prod-start.sh',
           environmentVariables: this.envVariables,
+          port: '8080',
         },
         repositoryUrl: 'https://github.com/AndreyKarapetyan/invest-be',
         branch: 'master',
@@ -111,8 +112,8 @@ export class InvestInfrastructureStack extends cdk.Stack {
           'arn:aws:apprunner:eu-west-1:344658833669:connection/MyConnection/d6e8dea2eeb64a5d8ff2de0267a70bc1',
         ),
       }),
-      cpu: appRunner.Cpu.ONE_VCPU,
-      memory: appRunner.Memory.TWO_GB,
+      cpu: appRunner.Cpu.TWO_VCPU,
+      memory: appRunner.Memory.FOUR_GB,
       instanceRole: this.appRunnerRole,
       vpcConnector,
     });

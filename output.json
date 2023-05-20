@@ -1,6 +1,6 @@
 {
   "InvestInfrastructureStack": {
-    "appRunnerArn": "arn:aws:apprunner:eu-west-1:344658833669:service/MyAppRunner1E052CCF-tMrmMWVR8aEb/32618dcc403544f9a90373ec9b0e4fd5",
-    "dbInstanceHostname": "investinfrastructurestack-myrds713a8bd1-owzsoe7dnigw.cj90pxwye0ot.eu-west-1.rds.amazonaws.com"
+    "appRunnerArn": "arn:aws:apprunner:eu-west-1:344658833669:service/MyAppRunner1E052CCF-xEan8nSCvq21/58ccc7b4c71849b6a9f7559f5ee70973",
+    "dbInstanceHostname": "investinfrastructurestack-myrds713a8bd1-qlw1dq6t4mn9.cj90pxwye0ot.eu-west-1.rds.amazonaws.com"
   }
 }
