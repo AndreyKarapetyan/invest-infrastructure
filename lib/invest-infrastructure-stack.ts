@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as path from 'path';
 import * as rds from 'aws-cdk-lib/aws-rds';
+import * as kms from 'aws-cdk-lib/aws-kms';
 import { CfnOutput, RemovalPolicy, SecretValue } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Runtime } from '@aws-cdk/aws-apprunner-alpha';
@@ -16,7 +17,7 @@ import { SubnetType } from 'aws-cdk-lib/aws-ec2';
     3. Deploy together */
 export class InvestInfrastructureStack extends cdk.Stack {
   private vpc: ec2.Vpc;
-  private dnInstance: rds.DatabaseInstance;
+  private dbInstance: rds.DatabaseInstance;
   private appRunnerRole: iam.Role;
   private appRunner: appRunner.Service;
   private envVariables: { [key: string]: string };
@@ -35,11 +36,11 @@ export class InvestInfrastructureStack extends cdk.Stack {
       subnetConfiguration: [
         {
           subnetType: SubnetType.PUBLIC,
-          name: 'Some name',
+          name: 'MyPublicSubnet',
         },
         {
           subnetType: SubnetType.PRIVATE_WITH_EGRESS,
-          name: 'Another name',
+          name: 'MyPrivateSubnet',
         },
       ],
       maxAzs: 2,
@@ -52,7 +53,7 @@ export class InvestInfrastructureStack extends cdk.Stack {
       vpc: this.vpc,
     });
     securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(3306));
-    this.dnInstance = new rds.DatabaseInstance(this, 'MyRds', {
+    this.dbInstance = new rds.DatabaseInstance(this, 'MyRds', {
       engine: rds.DatabaseInstanceEngine.mysql({
         version: rds.MysqlEngineVersion.VER_8_0_31,
       }),
@@ -68,10 +69,16 @@ export class InvestInfrastructureStack extends cdk.Stack {
         password: SecretValue.unsafePlainText(this.envVariables.DB_PASSWORD),
       }),
       securityGroups: [securityGroup],
+      maxAllocatedStorage: 10,
+      storageEncrypted: true,
+      storageEncryptionKey: new kms.Key(this, 'MyKey', {
+        enableKeyRotation: true,
+        removalPolicy: RemovalPolicy.DESTROY,
+      }),
     });
     new CfnOutput(this, 'dbInstanceHostname', {
       exportName: 'dbInstanceHostname',
-      value: this.dnInstance.instanceEndpoint.hostname,
+      value: this.dbInstance.instanceEndpoint.hostname,
     });
   }
 
@@ -87,7 +94,7 @@ export class InvestInfrastructureStack extends cdk.Stack {
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         actions: ['rds:*'],
-        resources: [this.dnInstance.instanceArn],
+        resources: [this.dbInstance.instanceArn],
       }),
     );
   }

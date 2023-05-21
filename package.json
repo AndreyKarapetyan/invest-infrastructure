@@ -10,7 +10,8 @@
     "test": "jest",
     "cdk": "cdk",
     "deploy:infra": "cdk deploy --outputs-file output.json",
-    "deploy": "sh deploy.sh"
+    "deploy": "sh deploy.sh",
+    "destroy": "cdk destroy"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
