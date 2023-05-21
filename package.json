@@ -9,6 +9,7 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
+    "deploy:infra": "cdk deploy --outputs-file output.json",
     "deploy": "sh deploy.sh"
   },
   "devDependencies": {

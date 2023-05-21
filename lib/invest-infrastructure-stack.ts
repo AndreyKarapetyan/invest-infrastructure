@@ -57,6 +57,7 @@ export class InvestInfrastructureStack extends cdk.Stack {
         version: rds.MysqlEngineVersion.VER_8_0_31,
       }),
       vpc: this.vpc,
+      vpcSubnets: this.vpc.selectSubnets({ subnetType: ec2.SubnetType.PUBLIC }),
       allocatedStorage: 5,
       databaseName: 'invest',
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
